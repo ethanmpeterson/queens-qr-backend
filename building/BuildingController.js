@@ -33,4 +33,12 @@ router.get('/', function (req, res) {
     });
 });
 
+router.get('/:id', function (req, res) {
+    Building.findById(req.params.id, function (err, building) {
+        if (err) return res.status(500).send("There was a problem finding the Building");
+        if (!building) return res.status(404).send("No user found.");
+        res.status(200).send(building);
+    });
+});
+
 module.exports = router;
