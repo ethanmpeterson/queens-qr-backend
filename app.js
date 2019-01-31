@@ -4,6 +4,10 @@ var db = require('./db');
 
 var port = process.env.PORT || 3000;
 
+if (port == 3000) {
+    require('dotenv').load();
+}
+
 //app.get('/', (req, res) => res.send('Hello World!'))
 
 var BuildingController = require('./building/BuildingController');
