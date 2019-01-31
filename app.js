@@ -20,5 +20,8 @@ var db = require('./db');
 var BuildingController = require('./building/BuildingController');
 app.use('/buildings', BuildingController);
 
+var ServiceController = require('./service/ServiceController');
+app.use('/services', ServiceController);
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
