@@ -1,14 +1,21 @@
 const express = require('express')
 const app = express()
-var db = require('./db');
+const dotenv = require('dotenv')
 
 var port = process.env.PORT || 3000;
 
+var result = 0;
+
 if (port == 3000) {
-    require('dotenv').load();
+    result = dotenv.config()
 }
 
-//app.get('/', (req, res) => res.send('Hello World!'))
+if (result != 0 && result.error) {
+    throw result.error
+}
+
+
+var db = require('./db');
 
 var BuildingController = require('./building/BuildingController');
 app.use('/buildings', BuildingController);
