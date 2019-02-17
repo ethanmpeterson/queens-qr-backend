@@ -12,6 +12,9 @@ var BuildingSchema = new mongoose.Schema({
     services: [{
         type: Object
     }],
+    entrances: [{
+        type: Object
+    }]
     
 });
 mongoose.model('Building', BuildingSchema);
