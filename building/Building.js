@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-
+var Service = require('../service/Service');
 var BuildingSchema = new mongoose.Schema({
     name: String,
     address: String,
@@ -10,7 +10,7 @@ var BuildingSchema = new mongoose.Schema({
         type: String,
     }],
     services: [{
-        type: String
+        type: Object
     }],
     
 });
