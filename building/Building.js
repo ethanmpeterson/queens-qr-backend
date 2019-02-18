@@ -4,7 +4,7 @@ var BuildingSchema = new mongoose.Schema({
     name: String,
     address: String,
     faculty: String,
-    hours: String,
+    hours: Object,
     history: String,
     alias: [{
         type: String,
