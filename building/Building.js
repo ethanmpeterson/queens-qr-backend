@@ -15,7 +15,6 @@ var BuildingSchema = new mongoose.Schema({
     entrances: [{
         type: Object
     }]
-    
 });
 mongoose.model('Building', BuildingSchema);
 module.exports = mongoose.model('Building');

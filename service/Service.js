@@ -6,9 +6,9 @@ var ServiceSchema = new mongoose.Schema({
     faculty: String,
     hours: String,
     description: String,
-    entrances: [{
+    entrances: {
         type: Object
-    }]
+    }
 });
 mongoose.model('Service', ServiceSchema);
 module.exports = mongoose.model('Service');
