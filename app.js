@@ -6,9 +6,9 @@ var port = process.env.PORT || 3000;
 
 var result = 0;
 
-if (port == 3000) {
+if (port == 3000) { // only if in local env
     result = dotenv.config()
-}
+} // heroku has its own config vars
 
 if (result != 0 && result.error) {
     throw result.error
