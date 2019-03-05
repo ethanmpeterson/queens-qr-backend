@@ -23,5 +23,7 @@ app.use('/buildings', BuildingController);
 var ServiceController = require('./service/ServiceController');
 app.use('/services', ServiceController);
 
+app.use('/floorplans', express.static('floorplans'))
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
