@@ -2,9 +2,12 @@ var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
 
+const fs = require('fs');
+const fileUpload = require('express-fileupload');
 
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
+router.use(fileUpload());
 var Building = require('./Building');
 
 router.post('/', function (req, res) {
@@ -39,6 +42,22 @@ router.get('/:id', function (req, res) {
         if (!building) return res.status(404).send("No user found.");
         res.status(200).send(building);
     });
+});
+
+router.post('/upload', function (req, res) {
+
+    let file = req.files.image;
+    console.log(file);
+    // let floorNum = req.body.number;
+    // let id = req.body.id;
+    // let fileName = String(floorNum) + ".png";
+
+    // console.log(floorNum);
+    // console.log(id);
+    // console.log(fileName);
+    return res.status(200).send("TEST Successful");
+    // move the file
+
 });
 
 module.exports = router;
