@@ -6,7 +6,7 @@ var ServiceSchema = new mongoose.Schema({
     faculty: String,
     hours: String,
     description: String,
-    entrances: {
+    entrance: {
         type: Object
     }
 });

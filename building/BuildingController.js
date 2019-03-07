@@ -45,12 +45,21 @@ router.get('/:id', function (req, res) {
 });
 
 router.post('/upload', function (req, res) {
-
+    if (Object.keys(req.files).length == 0) {
+        return res.status(400).send("No files given")
+    }
     let file = req.files.image;
     console.log(file);
-    // let floorNum = req.body.number;
-    // let id = req.body.id;
-    // let fileName = String(floorNum) + ".png";
+    let floorNum = req.body.number
+    if (!Number(floorNum)) {
+        res.status(400).send("Floor number is not a number");
+    }
+    let id = req.body.id;
+    Building.findById(id, function (err, building) {
+        if (err) return res.status(500).send("There was a problem finding the Building");
+        if (!building) return res.status(404).send("No building found for given id");
+    });
+    let fileName = String(floorNum) + ".png";
 
     // console.log(floorNum);
     // console.log(id);
@@ -58,6 +67,10 @@ router.post('/upload', function (req, res) {
     return res.status(200).send("TEST Successful");
     // move the file
 
+});
+
+router.post('/search', function (req, res) {
+    return res.status(200).send("WIP");
 });
 
 module.exports = router;

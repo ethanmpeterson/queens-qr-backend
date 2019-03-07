@@ -17,7 +17,6 @@ if (result != 0 && result.error) {
 
 
 var db = require('./db');
-//app.use(fileUpload());
 
 var BuildingController = require('./building/BuildingController');
 app.use('/buildings', BuildingController);
