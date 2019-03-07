@@ -8,6 +8,7 @@ const fileUpload = require('express-fileupload');
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 router.use(fileUpload());
+
 var Building = require('./Building');
 
 router.post('/', function (req, res) {
@@ -63,17 +64,23 @@ router.post('/upload', function (req, res) {
     });
     let fileName = String(floorNum) + ".png";
     console.log(fileName);
-    const path = '../' + id + '/';
+    const path = './floorplans/' + id + '/';
 
     if (!fs.existsSync(path))  {
         // then create the folder using building ID
+        fs.mkdirSync(path);
     }
     
     // load the file into building ID folder
-
-
-    return res.status(200).send("TEST Successful");
-    // move the file
+    file.mv(path + fileName, function (err) {
+        console.log(err);
+        if (err) return res.status(500).send(err);
+    });
+    const response = {
+        "file_name" : fileName,
+        "id_folder" : id
+    };
+    return res.status(200).send(response);
 
 });
 
