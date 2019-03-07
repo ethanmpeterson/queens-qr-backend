@@ -50,20 +50,28 @@ router.post('/upload', function (req, res) {
     }
     let file = req.files.image;
     console.log(file);
-    let floorNum = req.body.number
-    if (!Number(floorNum)) {
+    let floorNum = parseInt(req.body.number)
+    console.log(floorNum)
+    console.log(typeof(floorNum))
+    if (floorNum == NaN) {
         res.status(400).send("Floor number is not a number");
     }
-    let id = req.body.id;
+    let id = String(req.body.id);
     Building.findById(id, function (err, building) {
         if (err) return res.status(500).send("There was a problem finding the Building");
         if (!building) return res.status(404).send("No building found for given id");
     });
     let fileName = String(floorNum) + ".png";
+    console.log(fileName);
+    const path = '../' + id + '/';
 
-    // console.log(floorNum);
-    // console.log(id);
-    // console.log(fileName);
+    if (!fs.existsSync(path))  {
+        // then create the folder using building ID
+    }
+    
+    // load the file into building ID folder
+
+
     return res.status(200).send("TEST Successful");
     // move the file
 
