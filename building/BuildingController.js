@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
+var levenshtein = require('levenshtein');
 
 const fs = require('fs');
 const fileUpload = require('express-fileupload');
@@ -10,6 +11,8 @@ router.use(bodyParser.json());
 router.use(fileUpload());
 
 var Building = require('./Building');
+
+const distanceCap = 6; // the levenshtein distance cap for search endpoint
 
 router.post('/', function (req, res) {
     Building.create({
@@ -84,8 +87,39 @@ router.post('/upload', function (req, res) {
 
 });
 
+
 router.post('/search', function (req, res) {
-    return res.status(200).send("WIP");
+    if (req.body.id != null) {
+        Building.findById(req.body.id, function (err, building) {
+            if (err) return res.status(500).send("There was a problem finding the Building");
+            if (!building) return res.status(404).send("No Bui;ding found.");
+            // replace with levenshtein 
+            var services = []
+            for (var i = 0; i < building['services'].length; i++) {
+                s = building['services'][i];
+                services.push(s['name']);
+            }
+            var results = []
+            for (var j = 0; j < services.length; j++) {
+                var l = new levenshtein(services[j], req.body.query);
+                if (l.distance <= distanceCap) {
+                    results.push(services[j]);
+                }
+            }
+            if (results.length > 0) {
+                res.status(200).send(results);
+            } else {
+                res.status(204).send("");
+            }
+        });
+    } else {
+        Building.find({}, function (err, buildings) {
+            if (err) return res.status(500).send("error getting list");
+            // run search on all services
+            return res.status(200).send("got em");
+        });
+    }
+    //return res.status(200).send("WIP");
 });
 
 module.exports = router;
