@@ -115,8 +115,28 @@ router.post('/search', function (req, res) {
     } else {
         Building.find({}, function (err, buildings) {
             if (err) return res.status(500).send("error getting list");
-            // run search on all services
-            return res.status(200).send("got em");
+            // collect all services in one array
+            var services = []
+            for (var i = 0; i < buildings.length; i++) {
+                for (var j = 0; j < buildings[i]['services'].length; j++) {
+                    var s = buildings[i]['services'][j];
+                    services.push(s['name']);
+                }
+            }
+
+            var results = []
+            for (var k = 0; k < services.length; k++) {
+                var l = new levenshtein(services[k], req.body.query);
+                if (l.distance <= distanceCap) {
+                    results.push(services[k]);
+                }
+            }
+            if (results.length > 0) {
+                res.status(200).send(results);
+            } else {
+                res.status(204).send("");
+            }
+
         });
     }
     //return res.status(200).send("WIP");
