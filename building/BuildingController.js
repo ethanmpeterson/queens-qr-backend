@@ -67,6 +67,11 @@ router.post('/upload', function (req, res) {
     });
     let fileName = String(floorNum) + ".png";
     console.log(fileName);
+    
+    if (!fs.existsSync('./floorplans')) {
+        fs.mkdirSync('./floorplans');
+    }
+
     const path = './floorplans/' + id + '/';
 
     if (!fs.existsSync(path))  {
