@@ -12,7 +12,7 @@ router.use(fileUpload());
 
 var Building = require('./Building');
 
-const distanceCap = 6; // the levenshtein distance cap for search endpoint
+const distanceCap = 10; // the levenshtein distance cap for search endpoint
 
 router.post('/', function (req, res) {
     Building.create({
