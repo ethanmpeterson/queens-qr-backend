@@ -67,8 +67,8 @@ router.post('/upload', function (req, res) {
     });
     let fileName = String(floorNum) + ".png";
     console.log(fileName);
-    
-    if (!fs.existsSync('./floorplans')) {
+
+    if (!fs.existsSync('./floorplans')) { // was having trouble with this directory getting pushed to g cloud
         fs.mkdirSync('./floorplans');
     }
 
@@ -92,12 +92,49 @@ router.post('/upload', function (req, res) {
 
 });
 
+function containsID(buildings, id) {
+    // make array of IDs
+    var ids = []
+    for (var i = 0; i < buildings.length; i++) {
+        ids.push(buildings[i]['_id']);
+    }
+    return ids.includes(id);
+} 
 
-router.post('/search', function (req, res) {
+router.post('/building_search', function (req, res) {
+    if (!String(req.body.query)) {
+        res.status(400).send("No query given")
+    }
+    Building.find({}, function (err, buildings) {
+        if (err) return res.status(500).send("Could not get building list");
+        var matches = [];
+        var query = req.body.query;
+        for (var i = 0; i < buildings.length; i++) {
+            
+            var nameMatch = new levenshtein(buildings[i]['name'], query);
+            if (nameMatch.distance <= distanceCap) matches.push(buildings[i]);
+
+            alias = buildings[i]['alias'];
+            for (var j = 0; j < alias.length; j++) {
+                var aliasMatch = new levenshtein(alias[i], query);
+                if (aliasMatch.distance <= distanceCap) matches.push(buildings[i]);
+            }
+        }
+        // remove duplicate buildings
+        var uniqueBuildings = []
+        for (var i = 0; i < buildings.length; i++) {
+            if (!containsID(uniqueBuildings, buildings[i]['id'])) uniqueBuildings.push(buildings[i]);
+        }
+        if (uniqueBuildings.length > 0) return res.status(200).send(uniqueBuildings);
+        return res.status(204).send("");
+    });
+});
+
+router.post('/service_search', function (req, res) {
     if (req.body.id != null) {
         Building.findById(req.body.id, function (err, building) {
             if (err) return res.status(500).send("There was a problem finding the Building");
-            if (!building) return res.status(404).send("No Bui;ding found.");
+            if (!building) return res.status(404).send("No Building found.");
             // replace with levenshtein 
             var services = []
             for (var i = 0; i < building['services'].length; i++) {
