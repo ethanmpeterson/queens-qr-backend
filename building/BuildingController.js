@@ -135,7 +135,7 @@ router.post('/service_search', function (req, res) {
         Building.findById(req.body.id, function (err, building) {
             if (err) return res.status(500).send("There was a problem finding the Building");
             if (!building) return res.status(404).send("No Building found.");
-            // replace with levenshtein 
+            
             var services = []
             for (var i = 0; i < building['services'].length; i++) {
                 s = building['services'][i];
@@ -181,7 +181,6 @@ router.post('/service_search', function (req, res) {
 
         });
     }
-    //return res.status(200).send("WIP");
 });
 
 module.exports = router;
